@@ -120,13 +120,13 @@ const screensDe: Screen[] = [
 ];
 
 const audioTracksEn: Record<number, string> = {
-  0:'/audio/screen-00.mp3', 1:'/audio/screen-01.mp3', 2:'/audio/screen-02.mp3',
-  3:'/audio/screen-03.mp3', 4:'/audio/screen-04.mp3', 5:'/audio/screen-05.mp3',
-  6:'/audio/screen-06.mp3', 7:'/audio/screen-07.mp3', 9:'/audio/screen-09.mp3',
-  10:'/audio/screen-10.mp3', 11:'/audio/screen-11.mp3', 13:'/audio/screen-13.mp3',
-  14:'/audio/screen-14.mp3', 15:'/audio/screen-15.mp3',
+  0:'audio/screen-00.mp3', 1:'audio/screen-01.mp3', 2:'audio/screen-02.mp3',
+  3:'audio/screen-03.mp3', 4:'audio/screen-04.mp3', 5:'audio/screen-05.mp3',
+  6:'audio/screen-06.mp3', 7:'audio/screen-07.mp3', 9:'audio/screen-09.mp3',
+  10:'audio/screen-10.mp3', 11:'audio/screen-11.mp3', 13:'audio/screen-13.mp3',
+  14:'audio/screen-14.mp3', 15:'audio/screen-15.mp3',
 };
-const audioTracksDe: Record<number, string> = Object.fromEntries([0,1,2,3,4,5,6,7,9,10,11,13,14,15].map(index => [index, `/audio/de-screen-${String(index).padStart(2,'0')}.mp3`]));
+const audioTracksDe: Record<number, string> = Object.fromEntries([0,1,2,3,4,5,6,7,9,10,11,13,14,15].map(index => [index, `audio/de-screen-${String(index).padStart(2,'0')}.mp3`]));
 
 export default function Home() {
   const [language, setLanguage] = useState<'en'|'de'>('en');
@@ -156,9 +156,9 @@ export default function Home() {
     return () => { audio.pause(); audio.currentTime = 0; };
   }, [current, soundOn, language]);
 
-  return <main className={`course-shell lang-${language} tone-${screen.tone ?? 'paper'}`}>
+  return <main className={`course-shell lang-${language} tone-${screen.tone ?? 'paper'} ${current === 0 ? 'is-cover' : ''}`}>
     <a className="skip-link" href="#screen-title">{de?'Zum Kursinhalt springen':'Skip to lesson'}</a>
-    <Header current={current} soundOn={soundOn} setSoundOn={setSoundOn} language={language} setLanguage={changeLanguage} />
+    <Header current={current} soundOn={soundOn} setSoundOn={setSoundOn} language={language} setLanguage={changeLanguage} restart={() => { setCurrent(0); setAnswers({}); setFlipped({}); }} />
     {current === 0 ? <Cover language={language} /> : <section className="lesson-stage" aria-live="polite">
       <div className={`lesson-copy ${screen.cards ? 'has-cards' : ''} ${screen.options ? 'has-choices' : ''}`}>
         <p className="course-type">{screen.eyebrow}</p>
@@ -183,8 +183,8 @@ export default function Home() {
   </main>;
 }
 
-function Header({ current, soundOn, setSoundOn, language, setLanguage }: { current:number; soundOn:boolean; setSoundOn:(value:boolean)=>void; language:'en'|'de'; setLanguage:(value:'en'|'de')=>void }) { const de=language==='de'; return <header className="topbar"><a className="salon-mark" href="https://salonformat.com/"><span>SALON</span><span>FORMAT</span></a><a className="back-link" href="https://salonformat.com/#projects"><ArrowLeft /> {de?'Alle Projekte':'All projects'}</a><div className="top-actions"><div className="language-toggle"><button className={de?'active':''} onClick={()=>setLanguage('de')}>DE</button><span>/</span><button className={!de?'active':''} onClick={()=>setLanguage('en')}>EN</button></div><button className="sound-toggle" onClick={() => setSoundOn(!soundOn)} aria-label={soundOn ? (de?'Voice-over ausschalten':'Turn voice-over off') : (de?'Voice-over einschalten':'Turn voice-over on')} title={soundOn ? (de?'Voice-over an':'Voice-over on') : (de?'Voice-over aus':'Voice-over off')}>{soundOn ? <Volume2/> : <VolumeX/>}</button><span className="page-number">{String(current + 1).padStart(2,'0')} / 16</span></div></header>; }
-function Cover({language}:{language:'en'|'de'}) { const de=language==='de'; return <section className="editorial-stage"><div className="title-column"><p className="course-type">{de?'Interaktive Lernerfahrung':'Interactive learning experience'}</p><h1 id="screen-title">{de?<><span>Was, wenn ich</span><br/><em>etwas falsch mache?</em></>:<>What if I<br/>get it <em>wrong?</em></>}</h1><div className="title-rule"/><p className="subtitle">{de?'Die ersten zehn Minuten eines Erste-Hilfe-Kurses.':'The first ten minutes of a first-aid course.'}</p><p className="intro">{de?'Eine kurze Lernerfahrung darüber, wie Unsicherheit entsteht – und was den ersten Schritt erleichtert.':'A short exploration of uncertainty, practice and what helps someone take the first step.'}</p></div><aside className="time-panel"><div className="panel-label"><span/> {de?'Bevor der Kurs beginnt':'Before the course begins'}</div><div className="timer-figure"><svg viewBox="0 0 240 240"><circle className="timer-track" cx="120" cy="120" r="102"/><circle className="timer-progress" cx="120" cy="120" r="102"/></svg><div className="timer-copy"><strong>10:00</strong><span>{de?'Minuten':'minutes'}</span></div></div><p className="panel-note">{de?<>Der Kurs hat noch nicht begonnen.<br/>Die Lernerfahrung schon.</>:<>The course has not started.<br/>The learning experience has.</>}</p></aside></section>; }
+function Header({ current, soundOn, setSoundOn, language, setLanguage, restart }: { current:number; soundOn:boolean; setSoundOn:(value:boolean)=>void; language:'en'|'de'; setLanguage:(value:'en'|'de')=>void; restart:()=>void }) { const de=language==='de'; return <header className="topbar"><a className="salon-mark" href="https://salonformat.com/"><span>SALON</span><span>FORMAT</span></a><div className="header-navigation"><a className="back-link" href="https://salonformat.com/#projects"><ArrowLeft /> {de?'Alle Projekte':'All projects'}</a>{current>0&&<button className="restart-link" onClick={restart}>{de?'Zum Anfang':'Start again'}</button>}</div><div className="top-actions"><div className="language-toggle"><button className={de?'active':''} onClick={()=>setLanguage('de')}>DE</button><span>/</span><button className={!de?'active':''} onClick={()=>setLanguage('en')}>EN</button></div><button className="sound-toggle" onClick={() => setSoundOn(!soundOn)} aria-label={soundOn ? (de?'Voice-over ausschalten':'Turn voice-over off') : (de?'Voice-over einschalten':'Turn voice-over on')} title={soundOn ? (de?'Voice-over an':'Voice-over on') : (de?'Voice-over aus':'Voice-over off')}>{soundOn ? <Volume2/> : <VolumeX/>}</button><span className="page-number">{String(current + 1).padStart(2,'0')} / 16</span></div></header>; }
+function Cover({language}:{language:'en'|'de'}) { const de=language==='de'; return <section className="editorial-stage"><div className="title-column"><p className="course-type">{de?'Interaktive Lernerfahrung':'Interactive learning experience'}</p><h1 id="screen-title">{de?<><span>Was, wenn ich</span><br/><em>etwas falsch</em><br/><em>mache?</em></>:<>What if I<br/>get it <em>wrong?</em></>}</h1><div className="title-rule"/><p className="subtitle">{de?'Die ersten zehn Minuten eines Erste-Hilfe-Kurses.':'The first ten minutes of a first-aid course.'}</p><p className="intro">{de?'Eine kurze Lernerfahrung darüber, wie Unsicherheit entsteht – und was den ersten Schritt erleichtert.':'A short exploration of uncertainty, practice and what helps someone take the first step.'}</p></div><aside className="time-panel"><div className="panel-label"><span/> {de?'Bevor der Kurs beginnt':'Before the course begins'}</div><div className="medical-motif" aria-hidden="true"><i/><b/></div><div className="timer-figure"><svg viewBox="0 0 240 240"><circle className="timer-track" cx="120" cy="120" r="102"/><circle className="timer-progress" cx="120" cy="120" r="102"/></svg><div className="timer-copy"><strong>10:00</strong><span>{de?'Minuten':'minutes'}</span></div></div><p className="panel-note">{de?<>Der Kurs hat noch nicht begonnen.<br/>Die Lernerfahrung schon.</>:<>The course has not started.<br/>The learning experience has.</>}</p></aside></section>; }
 function MinuteMark({ minute }: { minute:number }) { return <div className="minute-mark"><span>{String(Math.max(0,minute)).padStart(2,'0')}</span><small>MIN</small></div>; }
 function StrategyDiagram({ lines }: { lines:string[] }) { return <div className="strategy-diagram">{lines.map((line,index)=><div key={line}><span>{String(index+1).padStart(2,'0')}</span><p>{line.replace(/^\d+\s*[—-]\s*/, '')}</p></div>)}</div>; }
 function ObjectIllustration({ kind, language }: { kind:string; language:'en'|'de' }) {

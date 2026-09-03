@@ -9,6 +9,8 @@
 }
 
 :root {
+  --font-josefin: 'Josefin Sans';
+  --font-della-respira: 'Della Respira';
   --paper: #f3f0e8;
   --ink: #17201f;
   --muted: #65706d;
@@ -38,6 +40,9 @@ a, button { font: inherit; }
 .back-link { display: inline-flex; align-items: center; gap: .55rem; padding: 0; border: 0; background: transparent; color: inherit; text-decoration: none; font-size: .66rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; cursor: pointer; }
 .back-link svg { width: 15px; }
 .back-link:hover { color: var(--red); }
+.header-navigation { justify-self: center; display: flex; align-items: center; gap: 1.25rem; }
+.restart-link { padding: .1rem 0 .1rem 1.25rem; border: 0; border-left: 1px solid var(--edge); background: transparent; color: inherit; font-size: .63rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+.restart-link:hover, .restart-link:focus-visible { color: var(--red); }
 .top-actions { justify-self: end; display: flex; align-items: center; gap: 1.1rem; }
 .language-toggle { display: flex; align-items: center; gap: .35rem; font-size: .63rem; font-weight: 700; letter-spacing: .08em; }
 .language-toggle button { padding: .2rem; border: 0; background: transparent; color: inherit; opacity: .42; cursor: pointer; }
@@ -48,11 +53,12 @@ a, button { font: inherit; }
 .page-number { font-size: .68rem; font-weight: 700; letter-spacing: .14em; }
 
 .editorial-stage, .lesson-stage { min-height: 0; display: grid; grid-template-columns: minmax(0, 1.28fr) minmax(340px, .72fr); }
-.title-column, .lesson-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 7vh, 6rem) clamp(2rem, 7vw, 8rem); border-right: 1px solid var(--edge); }
+.title-column, .lesson-copy { position: relative; display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 7vh, 6rem) clamp(2rem, 7vw, 8rem); border-right: 1px solid var(--edge); }
 .course-type { margin: 0 0 clamp(1.8rem, 4vh, 3.4rem); color: var(--accent); font-size: .7rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
 h1 { margin: 0; max-width: 870px; font-family: var(--font-della-respira), Georgia, serif; font-size: clamp(4rem, 7vw, 8rem); line-height: .88; letter-spacing: -.065em; font-weight: 400; }
 h1 em { color: var(--red); font-style: normal; }
-.lang-de .title-column h1 { max-width: 720px; font-size: clamp(3.5rem, 5.45vw, 6.3rem); line-height: .92; }
+.lang-de .title-column h1 { max-width: 680px; font-size: clamp(3.25rem, 4.9vw, 5.65rem); line-height: .86; }
+.title-column { overflow: hidden; }
 .title-rule { width: 82px; height: 5px; margin-top: clamp(2rem, 4vh, 3.2rem); background: var(--red); }
 .subtitle { max-width: 610px; margin: 1.25rem 0 0; font-size: clamp(1.35rem, 2vw, 2rem); line-height: 1.18; font-weight: 600; letter-spacing: -.025em; }
 .intro { max-width: 530px; margin: 1rem 0 0; color: var(--muted); font-size: 1rem; line-height: 1.5; }
@@ -60,6 +66,10 @@ h1 em { color: var(--red); font-style: normal; }
 .time-panel { position: relative; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; align-items: center; padding: clamp(2rem, 5vw, 5rem); background: var(--sage); color: var(--ink); }
 .panel-label { display: flex; align-items: center; gap: .7rem; font-size: .66rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .panel-label span { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+.medical-motif { position: absolute; z-index: 0; top: 4rem; right: -6.5rem; width: 19rem; height: 19rem; opacity: .19; transform: rotate(9deg); pointer-events: none; }
+.medical-motif i, .medical-motif b { position: absolute; inset: 50% auto auto 50%; display: block; width: 19rem; height: 6.2rem; border-radius: 3.1rem; background: var(--white); transform: translate(-50%,-50%); }
+.medical-motif b { transform: translate(-50%,-50%) rotate(90deg); }
+.time-panel > :not(.medical-motif) { position: relative; z-index: 1; }
 .timer-figure { position: relative; width: min(100%, 420px); aspect-ratio: 1; align-self: center; justify-self: center; display: grid; place-items: center; }
 .timer-figure svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
 .timer-track, .timer-progress { fill: none; stroke-width: 2.4; }
@@ -70,7 +80,8 @@ h1 em { color: var(--red); font-style: normal; }
 .timer-copy span { display: block; margin-top: 1rem; font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
 .panel-note { margin: 0; font-family: var(--font-della-respira), Georgia, serif; font-size: clamp(1rem, 1.35vw, 1.25rem); line-height: 1.32; }
 
-.bottom-bar { display: grid; grid-template-columns: 1fr auto minmax(180px, 1fr); align-items: center; gap: 2rem; padding: 0 clamp(1.5rem, 4vw, 4.5rem); border-top: 1px solid var(--edge); }
+.bottom-bar { position: relative; display: grid; grid-template-columns: 1fr auto minmax(180px, 1fr); align-items: center; gap: 2rem; padding: 0 clamp(1.5rem, 4vw, 4.5rem); border-top: 1px solid var(--edge); }
+.is-cover .nav-buttons { position: absolute; z-index: 4; left: 59%; top: 0; transform: translate(-50%,-292px); }
 .bottom-bar p { margin: 0; font-size: .61rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .begin-button { display: inline-flex; align-items: center; gap: .75rem; height: 45px; padding: 0 1.2rem 0 1.35rem; border: 0; border-radius: 999px; background: var(--ink); color: var(--white); font-size: .72rem; font-weight: 700; letter-spacing: .05em; cursor: pointer; }
 .begin-button:hover { background: var(--red); }
@@ -158,9 +169,12 @@ blockquote { font-size: clamp(3rem, 5.4vw, 6rem); }
 @media (max-width: 820px) {
   .course-shell { height: auto; grid-template-rows: 68px auto 68px; }
   .topbar { grid-template-columns: 1fr auto; padding: 0 1.2rem; }
-  .back-link { display: none; }
+  .header-navigation .back-link { display: none; }
+  .header-navigation { justify-self: end; }
+  .restart-link { padding-left: 0; border-left: 0; }
   .editorial-stage, .lesson-stage { grid-template-columns: 1fr; }
   .title-column, .lesson-copy { min-height: 58svh; padding: 3rem 1.4rem; border-right: 0; border-bottom: 1px solid var(--edge); overflow: visible; }
+  .lang-de .title-column h1 { font-size: clamp(3.1rem, 13vw, 4.6rem); line-height: .88; }
   .course-type { margin-bottom: 1.8rem; }
   h1 { font-size: clamp(3.55rem, 16vw, 5.1rem); }
   .subtitle { font-size: 1.3rem; }
@@ -172,6 +186,7 @@ blockquote { font-size: clamp(3rem, 5.4vw, 6rem); }
   .flip-grid, .flip-grid.cards-2 { grid-template-columns: 1fr; max-width: none; }
   .flip-card { height: 145px; }
   .bottom-bar { grid-template-columns: auto 1fr; padding: 0 1.2rem; }
+  .is-cover .nav-buttons { position: static; transform: translateY(-24px); }
   .bottom-bar p { display: none; }
   .progress-line { width: 100%; }
 }
