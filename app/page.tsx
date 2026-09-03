@@ -33,7 +33,7 @@ export default function Home() {
   return <main className={`course-shell tone-${screen.tone ?? 'paper'}`}>
     <a className="skip-link" href="#screen-title">Skip to lesson</a>
     <Header current={current} soundOn={soundOn} setSoundOn={setSoundOn} />
-    {current === 0 ? <Cover onBegin={next} /> : <section className="lesson-stage" aria-live="polite">
+    {current === 0 ? <Cover /> : <section className="lesson-stage" aria-live="polite">
       <div className="lesson-copy">
         <p className="course-type">{screen.eyebrow}</p>
         {screen.quote ? <blockquote id="screen-title">{screen.quote}</blockquote> : <h1 id="screen-title">{screen.title?.split('\n').map((line, index, all) => <span key={line}>{line}{index < all.length - 1 && <br />}</span>)}</h1>}
@@ -49,9 +49,9 @@ export default function Home() {
 }
 
 function Header({ current, soundOn, setSoundOn }: { current:number; soundOn:boolean; setSoundOn:(value:boolean)=>void }) {
-  return <header className="topbar"><a className="salon-mark" href="https://salonformat.com/" aria-label="Salon Format home"><span>SALON</span><span>FORMAT</span></a><button className="back-link" onClick={() => current > 0 ? history.back() : undefined}><ArrowLeft /> All projects</button><div className="top-actions"><button className="sound-toggle" onClick={() => setSoundOn(!soundOn)} aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>{soundOn ? <Volume2 /> : <VolumeX />}</button><span className="page-number">{String(current + 1).padStart(2,'0')} / 16</span></div></header>;
+  return <header className="topbar"><a className="salon-mark" href="https://salonformat.com/" aria-label="Salon Format home"><span>SALON</span><span>FORMAT</span></a><a className="back-link" href="https://salonformat.com/#projects"><ArrowLeft /> All projects</a><div className="top-actions"><button className="sound-toggle" onClick={() => setSoundOn(!soundOn)} aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>{soundOn ? <Volume2 /> : <VolumeX />}</button><span className="page-number">{String(current + 1).padStart(2,'0')} / 16</span></div></header>;
 }
-function Cover({ onBegin: _onBegin }: { onBegin:()=>void }) {
+function Cover() {
   return <section className="editorial-stage"><div className="title-column"><p className="course-type">Interactive learning experience</p><h1 id="screen-title">What if I<br />get it <em>wrong?</em></h1><div className="title-rule"/><p className="subtitle">The first ten minutes of a first-aid course.</p><p className="intro">A short exploration of uncertainty, practice and what helps someone take the first step.</p></div><aside className="time-panel"><div className="panel-label"><span/> Before the course begins</div><div className="timer-figure"><svg viewBox="0 0 240 240"><circle className="timer-track" cx="120" cy="120" r="102"/><circle className="timer-progress" cx="120" cy="120" r="102"/></svg><div className="timer-copy"><strong>10:00</strong><span>minutes</span></div></div><p className="panel-note">The course has not started.<br/>The learning experience has.</p></aside></section>;
 }
 function MinuteMark({ minute }: { minute:number }) { return <div className="minute-mark"><span>{String(Math.max(0,minute)).padStart(2,'0')}</span><small>MIN</small></div>; }
