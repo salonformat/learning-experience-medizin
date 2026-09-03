@@ -165,15 +165,26 @@ blockquote { font-size: clamp(3rem, 5.4vw, 6rem); }
 .learning-feedback p { margin: .25rem 0 0; font-size: .84rem; line-height: 1.35; }
 .learning-feedback.correct { border-color: var(--accent); }
 .learning-feedback.incorrect { border-color: currentColor; }
+.course-feedback { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--edge); }
+.course-feedback > p { margin: 0 0 .7rem; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.course-feedback > div { display: flex; flex-wrap: wrap; gap: .45rem; }
+.course-feedback button { padding: .55rem .75rem; border: 1px solid var(--edge); border-radius: 999px; background: transparent; color: inherit; font-size: .72rem; cursor: pointer; }
+.course-feedback button:hover, .course-feedback button.selected { border-color: var(--red); background: var(--red); color: var(--white); }
+.course-feedback small { display: flex; align-items: center; gap: .4rem; margin-top: .65rem; color: var(--muted); font-size: .72rem; }
+.course-feedback small svg { width: 14px; }
+.is-final .lesson-copy { padding-top: 2rem; padding-bottom: 2rem; }
+.is-final .course-type { margin-bottom: 1rem; }
+.is-final .lesson-copy h1 { font-size: clamp(3.25rem, 5vw, 5.5rem); }
+.is-final .lesson-body, .is-final .strategy-strip, .is-final .inline-action { margin-top: 1rem; }
 .begin-button:disabled { opacity: .42; cursor: not-allowed; }
 .begin-button:disabled:hover { background: var(--ink); }
 .tone-red .begin-button:disabled:hover, .tone-ink .begin-button:disabled:hover { background: var(--lime); }
 
 @media (max-width: 820px) {
   .course-shell { height: auto; grid-template-rows: 68px auto 68px; }
-  .topbar { grid-template-columns: 1fr auto; padding: 0 1.2rem; }
+  .topbar { grid-template-columns: auto 1fr auto; gap: .65rem; padding: 0 1.2rem; }
   .header-navigation .back-link { display: none; }
-  .header-navigation { justify-self: end; }
+  .header-navigation { justify-self: center; }
   .restart-link { padding-left: 0; border-left: 0; }
   .editorial-stage, .lesson-stage { grid-template-columns: 1fr; }
   .title-column, .lesson-copy { min-height: 58svh; padding: 3rem 1.4rem; border-right: 0; border-bottom: 1px solid var(--edge); overflow: visible; }

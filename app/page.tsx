@@ -62,7 +62,7 @@ const screensEn: Screen[] = [
     { label: 'Wait → feel ready → begin perfectly', feedback: 'Learning usually creates readiness; it does not need to wait for it.' },
   ]},
   { eyebrow: 'Your takeaway', kicker: '10:00 / The course begins', title: 'You do not need to feel fearless to begin.', body: 'Make the situation clear. Choose a manageable level of participation. Use feedback to decide what comes next.', strategy: 'ORIENT\nDOSE\nTRY AGAIN', index: '03', tone: 'ink' },
-  { eyebrow: 'End / A beginning', kicker: 'A learning experience by Salon Format', title: 'Ready enough is a real learning outcome.', body: 'You arrived with a question. You leave with a sequence you can use.', action: 'Experience again', tone: 'paper' },
+  { eyebrow: 'Your learning result', kicker: 'A learning experience by Salon Format', title: 'You now have a way to begin.', body: 'You can make the situation clear, choose a manageable level, try and use specific feedback to plan the next attempt.', strategy: 'ORIENT\nCHOOSE A LEVEL\nTRY\nUSE FEEDBACK', action: 'Experience again', tone: 'paper' },
 ];
 
 const screensDe: Screen[] = [
@@ -116,7 +116,7 @@ const screensDe: Screen[] = [
     { label:'Warten → bereit fühlen → perfekt beginnen', feedback:'Bereitschaft entsteht häufig durch das Lernen. Sie muss nicht vollständig davor da sein.' },
   ]},
   { eyebrow:'Das nimmst du mit', kicker:'10:00 / Der Kurs beginnt', title:'Du musst nicht furchtlos sein, um anzufangen.', body:'Mach dir die Situation klar. Wähle eine machbare Form der Beteiligung. Nutze Feedback für deinen nächsten Versuch.', strategy:'ORIENTIEREN\nDOSIEREN\nERNEUT VERSUCHEN', index:'03', tone:'ink' },
-  { eyebrow:'Ende / Ein Anfang', kicker:'Eine Lernerfahrung von Salon Format', title:'Bereit genug ist ein echtes Lernergebnis.', body:'Du bist mit einer Frage gekommen. Du gehst mit einer Strategie, die du wiederverwenden kannst.', action:'Noch einmal erleben', tone:'paper' },
+  { eyebrow:'Dein Lernergebnis', kicker:'Eine Lernerfahrung von Salon Format', title:'Du weißt jetzt, wie du anfangen kannst.', body:'Du kannst die Situation klären, einen machbaren Einstieg wählen, einen Versuch wagen und mit konkretem Feedback den nächsten Schritt planen.', strategy:'ORIENTIEREN\nEINSTIEG WÄHLEN\nVERSUCHEN\nFEEDBACK NUTZEN', action:'Noch einmal erleben', tone:'paper' },
 ];
 
 const audioTracksEn: Record<number, string> = {
@@ -134,6 +134,7 @@ export default function Home() {
   const [soundOn, setSoundOn] = useState(false);
   const [answers, setAnswers] = useState<Record<number, string[]>>({});
   const [flipped, setFlipped] = useState<Record<number, number[]>>({});
+  const [experienceFeedback, setExperienceFeedback] = useState<string | null>(null);
   const screens = language === 'de' ? screensDe : screensEn;
   const de = language === 'de';
   const screen = screens[current];
@@ -145,7 +146,8 @@ export default function Home() {
   const flip = (index: number) => setFlipped(previous => ({ ...previous, [current]: [...new Set([...(previous[current] ?? []), index])] }));
   const next = () => complete && setCurrent(value => Math.min(value + 1, screens.length - 1));
   const previous = () => setCurrent(value => Math.max(value - 1, 0));
-  const changeLanguage = (value:'en'|'de') => { setLanguage(value); setCurrent(0); setAnswers({}); setFlipped({}); };
+  const restart = () => { setCurrent(0); setAnswers({}); setFlipped({}); setExperienceFeedback(null); };
+  const changeLanguage = (value:'en'|'de') => { setLanguage(value); restart(); };
 
   useEffect(() => {
     const track = language === 'de' ? audioTracksDe[current] : audioTracksEn[current];
@@ -156,9 +158,9 @@ export default function Home() {
     return () => { audio.pause(); audio.currentTime = 0; };
   }, [current, soundOn, language]);
 
-  return <main className={`course-shell lang-${language} tone-${screen.tone ?? 'paper'} ${current === 0 ? 'is-cover' : ''}`}>
+  return <main className={`course-shell lang-${language} tone-${screen.tone ?? 'paper'} ${current === 0 ? 'is-cover' : ''} ${current === 15 ? 'is-final' : ''}`}>
     <a className="skip-link" href="#screen-title">{de?'Zum Kursinhalt springen':'Skip to lesson'}</a>
-    <Header current={current} soundOn={soundOn} setSoundOn={setSoundOn} language={language} setLanguage={changeLanguage} restart={() => { setCurrent(0); setAnswers({}); setFlipped({}); }} />
+    <Header current={current} soundOn={soundOn} setSoundOn={setSoundOn} language={language} setLanguage={changeLanguage} restart={restart} />
     {current === 0 ? <Cover language={language} /> : <section className="lesson-stage" aria-live="polite">
       <div className={`lesson-copy ${screen.cards ? 'has-cards' : ''} ${screen.options ? 'has-choices' : ''}`}>
         <p className="course-type">{screen.eyebrow}</p>
@@ -175,7 +177,8 @@ export default function Home() {
           return <button className={active ? `selected ${option.correct ? 'correct-choice' : 'wrong-choice'}` : ''} key={option.label} onClick={() => choose(option.label)}><span>{option.label}</span>{active && (option.correct ? <Check /> : <X />)}</button>;
         })}</div>}
         {selectedOption && <div className={`learning-feedback ${selectedOption.correct ? 'correct' : 'incorrect'}`}><strong>{selectedOption.correct ? (de?'Richtig.':'Correct.') : (de?'Noch nicht.':'Not yet.')}</strong><p>{selectedOption.feedback}</p></div>}
-        {screen.action && <button className="inline-action" onClick={() => { setCurrent(0); setAnswers({}); setFlipped({}); }}>{screen.action}<ArrowRight /></button>}
+        {current===15&&<div className="course-feedback"><p>{de?'Wie hilfreich war diese Lernerfahrung für dich?':'How useful was this learning experience for you?'}</p><div>{(de?['Sehr hilfreich','Hilfreich','Noch nicht hilfreich']:['Very useful','Useful','Not useful yet']).map(label=><button key={label} className={experienceFeedback===label?'selected':''} onClick={()=>setExperienceFeedback(label)}>{label}</button>)}</div>{experienceFeedback&&<small><Check/> {de?'Danke für deine Rückmeldung.':'Thank you for your feedback.'}</small>}</div>}
+        {screen.action && <button className="inline-action" onClick={restart}>{screen.action}<ArrowRight /></button>}
       </div>
       <aside className="lesson-aside"><p className="time-code">{screen.kicker}</p>{screen.illustration ? <ObjectIllustration kind={screen.illustration} language={language} /> : screen.strategy ? <StrategyDiagram lines={screen.strategy.split('\n')} /> : screen.index ? <strong className="design-index">{screen.index}</strong> : <MinuteMark minute={Math.min(10, current - 1)} />}</aside>
     </section>}
