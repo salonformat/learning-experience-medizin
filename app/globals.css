@@ -84,6 +84,12 @@ blockquote { font-size: clamp(3rem, 5.4vw, 6rem); }
 .minute-mark span, .design-index { font-family: var(--font-della-respira), Georgia, serif; font-size: clamp(7rem, 12vw, 13rem); line-height: .75; letter-spacing: -.1em; font-weight: 400; }
 .minute-mark small { padding-bottom: .6rem; font-size: .65rem; font-weight: 700; letter-spacing: .16em; }
 .design-index { justify-self: center; color: var(--accent); }
+.object-illustration { justify-self: center; width: min(100%, 390px); max-height: 46vh; overflow: visible; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.object-illustration .accent-stroke { stroke: var(--lime); stroke-width: 7; }
+.object-illustration .solid-accent { fill: var(--lime); stroke: none; }
+.object-illustration .cutout-stroke { stroke: var(--ink); stroke-width: 4; }
+.tone-paper .object-illustration .cutout-stroke { stroke: var(--red); }
+.door-drawing { transform: rotate(-2deg); }
 .aside-note { margin: 0; font-family: var(--font-della-respira), Georgia, serif; font-size: clamp(1rem, 1.35vw, 1.25rem); line-height: 1.32; }
 .choice-list { display: grid; gap: .7rem; width: min(100%, 680px); margin-top: 2.2rem; }
 .choice-list button { display: flex; justify-content: space-between; align-items: center; min-height: 55px; padding: .9rem 1.1rem; border: 1px solid var(--edge); background: transparent; text-align: left; cursor: pointer; transition: .18s ease; }
@@ -113,6 +119,7 @@ blockquote { font-size: clamp(3rem, 5.4vw, 6rem); }
   .time-panel { min-height: 48svh; padding: 1.5rem; }
   .lesson-aside { min-height: 42svh; padding: 1.5rem; }
   .timer-figure { width: min(75vw, 310px); }
+  .object-illustration { width: min(75vw, 300px); max-height: 34svh; }
   .bottom-bar { grid-template-columns: auto 1fr; padding: 0 1.2rem; }
   .bottom-bar p { display: none; }
   .progress-line { width: 100%; }
