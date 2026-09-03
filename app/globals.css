@@ -86,6 +86,9 @@ h1 em { color: var(--red); font-style: normal; }
 .begin-button { display: inline-flex; align-items: center; gap: .75rem; height: 45px; padding: 0 1.2rem 0 1.35rem; border: 0; border-radius: 999px; background: var(--ink); color: var(--white); font-size: .72rem; font-weight: 700; letter-spacing: .05em; cursor: pointer; }
 .begin-button:hover { background: var(--red); }
 .begin-button svg { width: 16px; }
+.is-cover .begin-button { height: 54px; padding: 0 1.7rem 0 1.9rem; background: var(--red); color: var(--white); font-size: .76rem; letter-spacing: .06em; }
+.is-cover .begin-button:hover { background: var(--red-dark); }
+.is-cover .begin-button svg { width: 18px; }
 .progress-line { justify-self: end; width: min(100%, 320px); height: 4px; background: #d4d5ce; }
 .progress-line span { display: block; width: 6.25%; height: 100%; background: var(--red); }
 
